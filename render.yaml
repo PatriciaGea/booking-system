@@ -22,12 +22,12 @@ services:
       - key: GOOGLE_CLIENT_SECRET
         sync: false
       - key: FRONTEND_URL
-        sync: false
+        value: https://patriciagea.github.io/booking-system/
       - key: GOOGLE_CALLBACK_URL
-        sync: false
+        value: https://booking-system-api-xb41.onrender.com/auth/google/callback
       - key: PORT
         value: "3000"
       - key: NODE_ENV
         value: production
       - key: CORS_ORIGINS
-        sync: false
+        value: https://patriciagea.github.io,http://localhost:5173

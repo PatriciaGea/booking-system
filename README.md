@@ -145,7 +145,10 @@ npm run dev -- --host 127.0.0.1 --port 5180
 
 - Keep all backend secrets in Render environment variables.
 - Keep frontend environment minimal (`VITE_API_URL` only).
-- Configure Google OAuth redirect/origin values exactly as deployed URLs.
+- Configure Google OAuth redirect/origin values exactly as deployed URLs:
+  - Authorized JavaScript origins: `https://patriciagea.github.io`
+  - Authorized redirect URI: `https://booking-system-api-xb41.onrender.com/auth/google/callback`
+  - Render `FRONTEND_URL`: `https://patriciagea.github.io/booking-system/`
 - Use Gmail App Password (not Gmail account password) for email delivery.
 
 ## Author

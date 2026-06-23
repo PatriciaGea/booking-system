@@ -9,6 +9,7 @@ const connectDB = require("./db")
 const userRoutes = require("./routes/users") 
 const authRoutes = require("./routes/auth")
 const bookingRoutes = require("./routes/bookings")
+const { isEmailConfigured, verifyEmailTransport } = require("./email")
 
 const app = express()
 
@@ -25,10 +26,14 @@ const PORT = process.env.PORT || 3000
 
 
 connectDB()
+verifyEmailTransport()
 
 
 app.get("/health", (_req, res) => {
-	res.status(200).json({ status: "ok" })
+	res.status(200).json({
+		status: "ok",
+		emailConfigured: isEmailConfigured()
+	})
 })
 
 // Public authentication routes.

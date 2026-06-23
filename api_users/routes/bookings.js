@@ -5,7 +5,7 @@ const router = express.Router()
 const Booking = require("../models/booking")
 const User = require("../models/user")
 const authMiddleware = require("../middleware/auth")
-const nodemailer = require("nodemailer")
+const { sendBookingConfirmationEmail } = require("../email")
 
 const OPENING_HOUR_IN_MINUTES = 8 * 60
 const CLOSING_HOUR_IN_MINUTES = 18 * 60
@@ -22,53 +22,6 @@ function parseTimeToMinutes(time) {
   }
 
   return (hours * 60) + minutes
-}
-
-// Nodemailer configuration (Gmail).
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  },
-  connectionTimeout: 5000,
-  greetingTimeout: 5000,
-  socketTimeout: 10000
-})
-
-// Send booking confirmation email.
-async function sendConfirmationEmail(userEmail, userName, booking) {
-  const serviceSizeLabel = {
-    pequeno: "Small",
-    medio: "Medium",
-    grande: "Large",
-    small: "Small",
-    medium: "Medium",
-    large: "Large"
-  }[booking.serviceSize] || booking.serviceSize
-
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: userEmail,
-    subject: "Booking Confirmation",
-    html: `
-      <h2>Hello ${userName}!</h2>
-      <p>Your booking has been confirmed successfully.</p>
-      <p><strong>Date:</strong> ${booking.bookingDate}</p>
-      <p><strong>Time:</strong> ${booking.bookingTime}</p>
-      <p><strong>Service:</strong> ${serviceSizeLabel}</p>
-      <br>
-      <p>Thank you for booking with us.</p>
-    `
-  }
-
-  try {
-    await transporter.sendMail(mailOptions)
-    console.log("Confirmation email sent to:", userEmail)
-  } catch (error) {
-    console.error("Error sending email:", error)
-    // Do not block booking creation if email fails.
-  }
 }
 
 // POST /bookings - Create new booking (protected route)
@@ -125,17 +78,21 @@ router.post("/", authMiddleware, async (req, res) => {
     })
     await booking.save()
 
-    // Respond immediately; send confirmation email in the background.
+    const user = await User.findById(userId)
+
     res.status(201).json({
       message: "Booking created successfully",
       booking
     })
 
-    const user = await User.findById(userId)
     if (user?.email) {
-      sendConfirmationEmail(user.email, user.name, booking).catch((error) => {
-        console.error("Background email error:", error)
-      })
+      sendBookingConfirmationEmail(user.email, user.name, booking)
+        .then(() => {
+          console.log("Background email delivered to:", user.email)
+        })
+        .catch((error) => {
+          console.error("Background email error:", error.message)
+        })
     }
   } catch (error) {
     console.error("Error creating booking:", error)

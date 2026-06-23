@@ -150,6 +150,12 @@ npm run dev -- --host 127.0.0.1 --port 5180
   - Authorized redirect URI: `https://booking-system-api-xb41.onrender.com/auth/google/callback`
   - Render `FRONTEND_URL`: `https://patriciagea.github.io/BookingSystem/`
 - Use Gmail App Password (not Gmail account password) for email delivery.
+- On Render, set these environment variables for confirmation emails:
+  - `EMAIL_USER`: your full Gmail address (example: `you@gmail.com`)
+  - `EMAIL_PASS`: Gmail App Password with spaces removed
+  - Create the app password at https://myaccount.google.com/apppasswords (Google account must have 2-Step Verification enabled)
+- After updating env vars on Render, trigger a manual redeploy.
+- Check `https://booking-system-api-xb41.onrender.com/health` — it should return `"emailConfigured": true` after deploy.
 
 ## Author
 

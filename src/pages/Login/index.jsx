@@ -58,61 +58,81 @@ function Login({ authMessage, onLoginSuccess, onSwitchToRegister }) {
   }
 
   return (
-    <div className="login-page login-layout">
-      <form onSubmit={handleLogin} className="login-card">
-        <p className="eyebrow">Booking System</p>
-        <h1>Sign In</h1>
-        <p className="login-instruction">
-          You need to log in first.
-        </p>
+    <div className="login-page">
+      <div className="login-layout">
+        <form onSubmit={handleLogin} className="login-card">
+          <p className="eyebrow">Booking System</p>
+          <h1>Sign In</h1>
+          <p className="login-instruction">
+            You need to log in first.
+          </p>
 
-        <label htmlFor="login-email">Email</label>
-        <input
-          id="login-email"
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          disabled={isLoading}
-          autoComplete="email"
-        />
+          <label htmlFor="login-email">Email</label>
+          <input
+            id="login-email"
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={isLoading}
+            autoComplete="email"
+          />
 
-        <label htmlFor="login-password">Password</label>
-        <input
-          id="login-password"
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          disabled={isLoading}
-          autoComplete="current-password"
-        />
+          <label htmlFor="login-password">Password</label>
+          <input
+            id="login-password"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            disabled={isLoading}
+            autoComplete="current-password"
+          />
 
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? 'Signing in...' : 'Sign In'}
-        </button>
+          <button type="submit" disabled={isLoading}>
+            {isLoading ? 'Signing in...' : 'Sign In'}
+          </button>
 
-        <button
-          type="button"
-          className="google-btn"
-          onClick={handleGoogleLogin}
-          disabled={isLoading}
-        >
-          <span className="google-icon" aria-hidden="true">G</span>
-          Sign in with Google
-        </button>
+          <button
+            type="button"
+            className="google-btn"
+            onClick={handleGoogleLogin}
+            disabled={isLoading}
+          >
+            <span className="google-icon" aria-hidden="true">G</span>
+            Sign in with Google
+          </button>
 
-        <button 
-          type="button" 
-          className="secondary-btn"
-          onClick={onSwitchToRegister}
-          disabled={isLoading}
-        >
-          No account yet? Create one
-        </button>
+          <button 
+            type="button" 
+            className="secondary-btn"
+            onClick={onSwitchToRegister}
+            disabled={isLoading}
+          >
+            No account yet? Create one
+          </button>
 
-        {message && <p className="message">{message}</p>}
-      </form>
+          {message && <p className="message">{message}</p>}
+        </form>
+
+        <aside className="instructions-card">
+          <h2>Instructions</h2>
+          <p className="instructions-subtitle">How to book your appointment</p>
+          <ol className="instructions-list">
+            <li>Make a login.</li>
+            <li>Choose <strong>New Booking</strong>.</li>
+            <li>Check previous bookings on <strong>My Bookings</strong>.</li>
+            <li>
+              Delete a booking: on <strong>My Bookings</strong>, use the <strong>Cancel</strong> option.
+            </li>
+          </ol>
+          <p className="instructions-note">
+            <strong>Note:</strong> When you book, you receive a web confirmation message and an email
+            confirmation. You also receive a notification if the booking is not possible because
+            the selected time is too long for the service.
+          </p>
+        </aside>
+      </div>
 
       <aside className="project-info">
         <h2>Project by Patricia Gea</h2>

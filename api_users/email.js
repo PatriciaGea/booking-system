@@ -16,9 +16,7 @@ function getTransporter() {
     const emailPass = process.env.EMAIL_PASS.replace(/\s/g, "")
 
     transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
+      service: "gmail",
       auth: {
         user: emailUser,
         pass: emailPass
@@ -66,7 +64,7 @@ async function sendBookingConfirmationEmail(userEmail, userName, booking) {
   const senderEmail = process.env.EMAIL_USER.trim()
 
   await mailTransporter.sendMail({
-    from: `"Booking System" <${senderEmail}>`,
+    from: senderEmail,
     to: userEmail,
     subject: "Booking Confirmation",
     html: `

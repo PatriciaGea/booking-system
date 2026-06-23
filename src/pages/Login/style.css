@@ -2,6 +2,9 @@
   max-width: 1080px;
   margin: 36px auto;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
 }
 
 .login-layout {
@@ -12,7 +15,8 @@
 }
 
 .login-card,
-.project-info {
+.project-info,
+.instructions-card {
   border: 1px solid var(--gh-border);
   border-radius: 12px;
   background: var(--gh-surface);
@@ -139,6 +143,56 @@
   font-size: 13px;
 }
 
+.instructions-card {
+  padding: 22px;
+  background: linear-gradient(160deg, #1a2330 0%, #13181d 100%);
+}
+
+.instructions-card h2 {
+  margin: 0 0 6px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #f0f6fc;
+}
+
+.instructions-subtitle {
+  margin: 0 0 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #c9d1d9;
+}
+
+.instructions-list {
+  margin: 0 0 14px;
+  padding-left: 20px;
+  color: #e6edf3;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.instructions-list li {
+  margin-bottom: 8px;
+}
+
+.instructions-list strong {
+  color: #58a6ff;
+}
+
+.instructions-note {
+  margin: 0;
+  padding: 12px;
+  border: 1px solid #2f3c4c;
+  border-radius: 8px;
+  background: #1d2733;
+  color: #c9d1d9;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.instructions-note strong {
+  color: #f0f6fc;
+}
+
 .project-info {
   padding: 22px;
   background: linear-gradient(160deg, #1a1f24 0%, #13181d 100%);
@@ -224,7 +278,8 @@
   }
 
   .login-card,
-  .project-info {
+  .project-info,
+  .instructions-card {
     padding: 16px;
   }
 

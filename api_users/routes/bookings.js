@@ -79,21 +79,19 @@ router.post("/", authMiddleware, async (req, res) => {
     await booking.save()
 
     const user = await User.findById(userId)
+    if (user?.email) {
+      try {
+        await sendBookingConfirmationEmail(user.email, user.name, booking)
+      } catch (error) {
+        console.error("Error sending confirmation email:", error.message)
+        // Booking is already saved; do not fail the request if email fails.
+      }
+    }
 
     res.status(201).json({
       message: "Booking created successfully",
       booking
     })
-
-    if (user?.email) {
-      sendBookingConfirmationEmail(user.email, user.name, booking)
-        .then(() => {
-          console.log("Background email delivered to:", user.email)
-        })
-        .catch((error) => {
-          console.error("Background email error:", error.message)
-        })
-    }
   } catch (error) {
     console.error("Error creating booking:", error)
     res.status(500).json({ message: "Server error" })

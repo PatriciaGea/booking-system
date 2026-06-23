@@ -6,7 +6,7 @@ Built and maintained by Patricia Gea.
 
 ## Live Deployment
 
-- Frontend: https://patriciagea.github.io/booking-system/
+- Frontend: https://patriciagea.github.io/BookingSystem/
 
 ## Project Quality Highlights
 
@@ -148,7 +148,7 @@ npm run dev -- --host 127.0.0.1 --port 5180
 - Configure Google OAuth redirect/origin values exactly as deployed URLs:
   - Authorized JavaScript origins: `https://patriciagea.github.io`
   - Authorized redirect URI: `https://booking-system-api-xb41.onrender.com/auth/google/callback`
-  - Render `FRONTEND_URL`: `https://patriciagea.github.io/booking-system/`
+  - Render `FRONTEND_URL`: `https://patriciagea.github.io/BookingSystem/`
 - Use Gmail App Password (not Gmail account password) for email delivery.
 
 ## Author
@@ -160,4 +160,4 @@ Patricia Gea
 - GitHub: https://github.com/PatriciaGea
 - LinkedIn: https://www.linkedin.com/in/patriciageadev
 - Email: patricia.rodrigues@hyperisland.se
-- Live Project: https://patriciagea.github.io/booking-system/
+- Live Project: https://patriciagea.github.io/BookingSystem/

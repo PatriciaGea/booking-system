@@ -22,7 +22,7 @@ services:
       - key: GOOGLE_CLIENT_SECRET
         sync: false
       - key: FRONTEND_URL
-        value: https://patriciagea.github.io/booking-system/
+        value: https://patriciagea.github.io/BookingSystem/
       - key: GOOGLE_CALLBACK_URL
         value: https://booking-system-api-xb41.onrender.com/auth/google/callback
       - key: PORT

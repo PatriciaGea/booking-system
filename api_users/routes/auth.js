@@ -8,21 +8,9 @@ const passport = require("passport")
 const GoogleStrategy = require("passport-google-oauth20").Strategy
 const User = require("../models/user")
 
-function resolveFrontendUrl() {
-  const configuredUrl = process.env.FRONTEND_URL?.trim()
-  const fallbackUrl =
-    process.env.NODE_ENV === "production"
-      ? "https://patriciagea.github.io/booking-system/"
-      : "http://localhost:5173"
-
-  const frontendUrl = configuredUrl || fallbackUrl
-
-  // Repo was renamed from BookingSystem -> booking-system; keep old env values working.
-  return frontendUrl.replace(/\/BookingSystem\/?$/i, "/booking-system/")
-}
-
 function buildFrontendRedirect(searchParams = {}) {
-  const redirectUrl = new URL(resolveFrontendUrl())
+  const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173"
+  const redirectUrl = new URL(frontendUrl)
 
   Object.entries(searchParams).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== "") {

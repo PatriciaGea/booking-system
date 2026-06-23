@@ -1,39 +1,86 @@
 const nodemailer = require("nodemailer")
 
+let transporter = null
 let emailReady = false
 
-const transporter =
-  process.env.EMAIL_USER && process.env.EMAIL_PASS
-    ? nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS
-        }
-      })
-    : null
+function getEmailCredentials() {
+  const user = process.env.EMAIL_USER?.trim()
+  const pass = process.env.EMAIL_PASS?.replace(/\s/g, "")
+
+  if (!user || !pass) {
+    return null
+  }
+
+  return { user, pass }
+}
+
+function getTransportOptions() {
+  const credentials = getEmailCredentials()
+  if (!credentials) {
+    return []
+  }
+
+  const auth = {
+    user: credentials.user,
+    pass: credentials.pass
+  }
+
+  return [
+    { service: "gmail", auth },
+    {
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth
+    },
+    {
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      auth,
+      requireTLS: true
+    }
+  ]
+}
 
 function isEmailConfigured() {
-  return Boolean(transporter)
+  return Boolean(getEmailCredentials())
 }
 
 async function verifyEmailTransport() {
-  if (!transporter) {
+  emailReady = false
+  transporter = null
+
+  const options = getTransportOptions()
+  if (options.length === 0) {
     console.warn("Email disabled: set EMAIL_USER and EMAIL_PASS on the server")
-    emailReady = false
     return false
   }
 
-  try {
-    await transporter.verify()
-    emailReady = true
-    console.log("Email transport ready for:", process.env.EMAIL_USER)
-    return true
-  } catch (error) {
-    emailReady = false
-    console.error("Email transport verification failed:", error)
-    return false
+  for (const option of options) {
+    const candidate = nodemailer.createTransport(option)
+
+    try {
+      await candidate.verify()
+      transporter = candidate
+      emailReady = true
+      console.log(
+        "Email transport ready for:",
+        getEmailCredentials().user,
+        option.service ? "(gmail service)" : `(port ${option.port})`
+      )
+      return true
+    } catch (error) {
+      console.error(
+        "Email transport attempt failed:",
+        option.service || option.port,
+        error.message
+      )
+    }
   }
+
+  console.error("All Gmail transport attempts failed. Regenerate the Gmail App Password on Render.")
+  return false
 }
 
 function isEmailReady() {
@@ -41,8 +88,11 @@ function isEmailReady() {
 }
 
 async function sendBookingConfirmationEmail(userEmail, userName, booking) {
-  if (!transporter) {
-    throw new Error("Email is not configured on the server")
+  if (!transporter || !emailReady) {
+    const verified = await verifyEmailTransport()
+    if (!verified) {
+      throw new Error("Email transport is not ready")
+    }
   }
 
   const serviceSizeLabel = {
@@ -55,7 +105,7 @@ async function sendBookingConfirmationEmail(userEmail, userName, booking) {
   }[booking.serviceSize] || booking.serviceSize
 
   await transporter.sendMail({
-    from: process.env.EMAIL_USER,
+    from: getEmailCredentials().user,
     to: userEmail,
     subject: "Booking Confirmation",
     html: `

@@ -76,7 +76,7 @@ function BookingForm() {
     try {
       const token = localStorage.getItem('token')
       
-      await api.post('/bookings', {
+      const response = await api.post('/bookings', {
         serviceSize,
         bookingDate,
         bookingTime
@@ -86,7 +86,11 @@ function BookingForm() {
         }
       })
 
-      showMessage('Booking created successfully!')
+      const successMessage = response.data.emailSent
+        ? 'Booking created successfully! Confirmation email sent.'
+        : 'Booking created successfully!'
+
+      showMessage(successMessage)
       
       setServiceSize('small')
       setBookingDate('')

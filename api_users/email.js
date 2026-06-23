@@ -1,54 +1,47 @@
 const nodemailer = require("nodemailer")
 
-let transporter = null
+let emailReady = false
+
+const transporter =
+  process.env.EMAIL_USER && process.env.EMAIL_PASS
+    ? nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS
+        }
+      })
+    : null
 
 function isEmailConfigured() {
-  return Boolean(process.env.EMAIL_USER?.trim() && process.env.EMAIL_PASS?.trim())
-}
-
-function getTransporter() {
-  if (!isEmailConfigured()) {
-    return null
-  }
-
-  if (!transporter) {
-    const emailUser = process.env.EMAIL_USER.trim()
-    const emailPass = process.env.EMAIL_PASS.replace(/\s/g, "")
-
-    transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: emailUser,
-        pass: emailPass
-      },
-      connectionTimeout: 15000,
-      greetingTimeout: 15000,
-      socketTimeout: 20000
-    })
-  }
-
-  return transporter
+  return Boolean(transporter)
 }
 
 async function verifyEmailTransport() {
-  if (!isEmailConfigured()) {
+  if (!transporter) {
     console.warn("Email disabled: set EMAIL_USER and EMAIL_PASS on the server")
+    emailReady = false
     return false
   }
 
   try {
-    await getTransporter().verify()
-    console.log("Email transport ready for:", process.env.EMAIL_USER.trim())
+    await transporter.verify()
+    emailReady = true
+    console.log("Email transport ready for:", process.env.EMAIL_USER)
     return true
   } catch (error) {
-    console.error("Email transport verification failed:", error.message)
+    emailReady = false
+    console.error("Email transport verification failed:", error)
     return false
   }
 }
 
+function isEmailReady() {
+  return emailReady
+}
+
 async function sendBookingConfirmationEmail(userEmail, userName, booking) {
-  const mailTransporter = getTransporter()
-  if (!mailTransporter) {
+  if (!transporter) {
     throw new Error("Email is not configured on the server")
   }
 
@@ -61,10 +54,8 @@ async function sendBookingConfirmationEmail(userEmail, userName, booking) {
     large: "Large"
   }[booking.serviceSize] || booking.serviceSize
 
-  const senderEmail = process.env.EMAIL_USER.trim()
-
-  await mailTransporter.sendMail({
-    from: senderEmail,
+  await transporter.sendMail({
+    from: process.env.EMAIL_USER,
     to: userEmail,
     subject: "Booking Confirmation",
     html: `
@@ -83,6 +74,7 @@ async function sendBookingConfirmationEmail(userEmail, userName, booking) {
 
 module.exports = {
   isEmailConfigured,
+  isEmailReady,
   verifyEmailTransport,
   sendBookingConfirmationEmail
 }

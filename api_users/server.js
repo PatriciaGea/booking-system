@@ -9,7 +9,7 @@ const connectDB = require("./db")
 const userRoutes = require("./routes/users") 
 const authRoutes = require("./routes/auth")
 const bookingRoutes = require("./routes/bookings")
-const { isEmailConfigured, verifyEmailTransport } = require("./email")
+const { isEmailConfigured, isEmailReady, verifyEmailTransport } = require("./email")
 
 const app = express()
 
@@ -32,7 +32,8 @@ verifyEmailTransport()
 app.get("/health", (_req, res) => {
 	res.status(200).json({
 		status: "ok",
-		emailConfigured: isEmailConfigured()
+		emailConfigured: isEmailConfigured(),
+		emailReady: isEmailReady()
 	})
 })
 

@@ -59,7 +59,7 @@ function Login({ authMessage, onLoginSuccess, onSwitchToRegister }) {
 
   return (
     <div className="login-page">
-      <div className="login-layout">
+      <div className="login-top-row">
         <form onSubmit={handleLogin} className="login-card">
           <p className="eyebrow">Booking System</p>
           <h1>Sign In</h1>
@@ -116,50 +116,63 @@ function Login({ authMessage, onLoginSuccess, onSwitchToRegister }) {
         </form>
 
         <aside className="instructions-card">
-          <h2>Instructions</h2>
-          <p className="instructions-subtitle">How to book your appointment</p>
+          <div className="card-header">
+            <h2>Instructions</h2>
+            <p className="instructions-subtitle">How to book your appointment</p>
+          </div>
           <ol className="instructions-list">
-            <li>Make a login.</li>
-            <li>Choose <strong>New Booking</strong>.</li>
-            <li>Check previous bookings on <strong>My Bookings</strong>.</li>
             <li>
-              Delete a booking: on <strong>My Bookings</strong>, use the <strong>Cancel</strong> option.
+              <span className="step-number">1</span>
+              <span>Make a login.</span>
+            </li>
+            <li>
+              <span className="step-number">2</span>
+              <span>Choose <strong>New Booking</strong>.</span>
+            </li>
+            <li>
+              <span className="step-number">3</span>
+              <span>Check previous bookings on <strong>My Bookings</strong>.</span>
+            </li>
+            <li>
+              <span className="step-number">4</span>
+              <span>Delete a booking on <strong>My Bookings</strong> with <strong>Cancel</strong>.</span>
             </li>
           </ol>
-          <p className="instructions-note">
-            <strong>Note:</strong> When you book, you receive a web confirmation message and an email
-            confirmation. You also receive a notification if the booking is not possible because
-            the selected time is too long for the service.
-          </p>
         </aside>
       </div>
 
       <aside className="project-info">
-        <h2>Project by Patricia Gea</h2>
-        <p className="contact-title">Contact:</p>
-        <div className="contact-links">
-          <a href="https://github.com/PatriciaGea" target="_blank" rel="noreferrer">GitHub</a>
-          <a href="https://www.linkedin.com/in/patriciageafrontend/" target="_blank" rel="noreferrer">LinkedIn</a>
-          <a href="mailto:patricia.rodrigues@hyperisland.se">Email</a>
+        <div className="project-info-top">
+          <h2>Project by Patricia Gea</h2>
+          <div className="contact-links">
+            <a href="https://github.com/PatriciaGea" target="_blank" rel="noreferrer">GitHub</a>
+            <a href="https://www.linkedin.com/in/patriciageafrontend/" target="_blank" rel="noreferrer">LinkedIn</a>
+            <a href="mailto:patricia.rodrigues@hyperisland.se">Email</a>
+          </div>
         </div>
 
-        <div className="project-details">
-          <h3>About This Project</h3>
-          <p>
-            A full-stack booking system where users can create accounts, sign in,
-            book appointment slots, and manage their bookings.
-          </p>
+        <div className="project-info-grid">
+          <div className="project-block">
+            <h3>About</h3>
+            <p>
+              Full-stack booking system to create accounts, sign in, book slots, and manage appointments.
+            </p>
+          </div>
 
-          <h3>Technologies</h3>
-          <p>React, Vite, Node.js, Express, MongoDB, JWT, Google OAuth, Nodemailer.</p>
+          <div className="project-block">
+            <h3>Technologies</h3>
+            <p>React, Vite, Node.js, Express, MongoDB, JWT, Google OAuth, Nodemailer.</p>
+          </div>
 
-          <h3>Highlights</h3>
-          <ul>
-            <li>Secure authentication with JWT and Google sign-in</li>
-            <li>Booking conflict prevention by date and time</li>
-            <li>Responsive interface with accessible contrast</li>
-            <li>Email confirmation after successful booking</li>
-          </ul>
+          <div className="project-block">
+            <h3>Highlights</h3>
+            <ul>
+              <li>JWT and Google sign-in</li>
+              <li>Booking conflict prevention</li>
+              <li>Responsive accessible UI</li>
+              <li>Email confirmation</li>
+            </ul>
+          </div>
         </div>
       </aside>
     </div>
